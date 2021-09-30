@@ -52,7 +52,7 @@ public class UserThread extends Thread {
                 //2. Regex
                 //3. Storage the conversation
 
-            } while (!clientMessage.equals("Travou Maethe"));
+            } while (!clientMessage.equals("bye"));
 
             server.removeUser(userName, this);
             socket.close();

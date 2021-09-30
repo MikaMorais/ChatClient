@@ -34,22 +34,46 @@ public class ChatServer {
         }
     }
 
+    public static void main(String[] args) {
+        if(args.length < 1) {
+            System.out.println("To execute type: java chatServer <port>");
+            System.out.println("Ex.: java chatServer 9000\n");
+            System.exit(0);
+        }
+
+        int port = Integer.parseInt(args[0]);
+        ChatServer server = new ChatServer(port);
+        server.execute();
+    }
+
 
     public void addUser(String userName) {
+        userNames.add(userName);
     }
 
     public void removeUser(String userName, UserThread userThread) {
+        boolean removed = userNames.remove(userName);
+
+        if(removed) {
+            userThreads.remove(userThread);
+            System.out.println("User: " + userThread + " left");
+        }
     }
 
-    public void broadcast(String serverMessage, UserThread userThread) {
+    boolean hasUser() {
+        return !this.userNames.isEmpty();
     }
 
-    public boolean hasUser() {
-        return false;
+    Set<String> getUserNames() {
+        return this.userNames;
     }
 
-    public String getUserNames() {
-        return null;
+    public void broadcast(String serverMessage, UserThread excludeUser) {
+        userThreads.stream().filter((aUser) -> (aUser != excludeUser)).forEachOrdered((aUser) -> {
+            aUser.sendMessage(serverMessage);
+        });
     }
+
+    
     
 }
